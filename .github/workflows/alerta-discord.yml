@@ -19,7 +19,8 @@ jobs:
           SERVER_URL: ${{ github.server_url }}
           RUN_ID: ${{ github.run_id }}
         run: |
-          MESSAGE="🚀 Novo push em ${REPO}%0A👤 Autor: ${ACTOR}%0A🌿 Branch: ${REF_NAME}%0A🔖 Commit: ${SHA}%0A🔗 Execução: ${SERVER_URL}/${REPO}/actions/runs/${RUN_ID}"
+          MESSAGE="🚀 **Novo push no repositório!**\n\n📦 **Repo:** ${REPO}\n👤 **Autor:** ${ACTOR}\n🌿 **Branch:** ${REF_NAME}\n📝 **Commit:** ${SHA}\n\n🔗 **Ver execução:**\n${SERVER_URL}/${REPO}/actions/runs/${RUN_ID}"
+  
           curl -H "Content-Type: application/json" \
-               -d "{\"content\":\"${MESSAGE}\"}" \
-               "$DISCORD_WEBHOOK"
+             - d "{\"content\":\"${MESSAGE}\"}" \
+             "$DISCORD_WEBHOOK"

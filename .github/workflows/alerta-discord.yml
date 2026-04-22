@@ -6,21 +6,23 @@ on:
       - main
 
 jobs:
-  notificar-discord:
+  notificar:
     runs-on: ubuntu-latest
+
     steps:
       - name: Enviar alerta para o Discord
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           REPO: ${{ github.repository }}
           ACTOR: ${{ github.actor }}
-          SHA: ${{ github.sha }}
           REF_NAME: ${{ github.ref_name }}
           SERVER_URL: ${{ github.server_url }}
           RUN_ID: ${{ github.run_id }}
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+
         run: |
-          MESSAGE="🚀 **Novo push no repositório!**\n\n📦 **Repo:** ${REPO}\n👤 **Autor:** ${ACTOR}\n🌿 **Branch:** ${REF_NAME}\n📝 **Commit:** ${SHA}\n\n🔗 **Ver execução:**\n${SERVER_URL}/${REPO}/actions/runs/${RUN_ID}"
-  
+          MESSAGE="🚀 **Novo push no repositório!**\n\n📦 **Repo:** ${REPO}\n👤 **Autor:** ${ACTOR}\n🌿 **Branch:** ${REF_NAME}\n📝 **Commit:** ${COMMIT_MSG}\n\n🔗 **Ver execução:**\n${SERVER_URL}/${REPO}/actions/runs/${RUN_ID}"
+
           curl -H "Content-Type: application/json" \
-             - d "{\"content\":\"${MESSAGE}\"}" \
-             "$DISCORD_WEBHOOK"
+               -d "{\"content\":\"${MESSAGE}\"}" \
+               "$DISCORD_WEBHOOK"

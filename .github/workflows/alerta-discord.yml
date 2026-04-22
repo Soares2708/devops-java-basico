@@ -1,0 +1,25 @@
+name: Alerta Discord
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  notificar-discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enviar alerta para o Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          REPO: ${{ github.repository }}
+          ACTOR: ${{ github.actor }}
+          SHA: ${{ github.sha }}
+          REF_NAME: ${{ github.ref_name }}
+          SERVER_URL: ${{ github.server_url }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          MESSAGE="🚀 Novo push em ${REPO}%0A👤 Autor: ${ACTOR}%0A🌿 Branch: ${REF_NAME}%0A🔖 Commit: ${SHA}%0A🔗 Execução: ${SERVER_URL}/${REPO}/actions/runs/${RUN_ID}"
+          curl -H "Content-Type: application/json" \
+               -d "{\"content\":\"${MESSAGE}\"}" \
+               "$DISCORD_WEBHOOK"
